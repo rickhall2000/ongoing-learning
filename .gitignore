@@ -1,2 +1,6 @@
 logs/
+*.csv
+*.zip
+*.tgz
+.DS_Store
 .ipynb_checkpoints
