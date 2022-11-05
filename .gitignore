@@ -3,5 +3,6 @@ logs/
 *.csv
 *.zip
 *.tgz
+*.dot
 .DS_Store
 .ipynb_checkpoints
