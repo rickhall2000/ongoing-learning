@@ -1,5 +1,6 @@
 logs/
 *.pkl
+*.mmap
 *.csv
 *.zip
 *.tgz
