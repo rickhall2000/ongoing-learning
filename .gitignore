@@ -1,4 +1,6 @@
 logs/
+my_keras_model/
+my_logs/
 *.pkl
 *.mmap
 *.csv
