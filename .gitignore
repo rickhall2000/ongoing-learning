@@ -2,6 +2,7 @@ logs/
 my_keras_model/
 my_logs/
 my_fashion_mnist/
+*.tfrecord
 *.pkl
 *.mmap
 *.csv
