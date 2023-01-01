@@ -11,3 +11,4 @@ my_fashion_mnist/
 *.dot
 .DS_Store
 .ipynb_checkpoints
+target/
