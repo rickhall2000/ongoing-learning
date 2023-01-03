@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React, { Children, useState } from 'react';
+import axios from 'axios';
 
-// todo: add tailwind css to give it some style
+// todo: make the form better looking
+// todo: move Button into its own file
 // todo: add http library for API calls
-// todo: Do someting with the text boxes 
-// todo: -- step one, make the show translation button copy text from source to translation
-// todo: -- should put ids on these components, right?
-// todo: reset should clear all the things
+// todo: figure out how to record from microphone
+// todo: make working Textarea component
 
-function GenericButtonClick() {
-  window.alert("You clicked me");
+
+function doIHaveAxios(){
+  axios.get("www.google.com")
+  return "Cool"
 }
 
-function Button() {
-  return <button onClick={GenericButtonClick}>Record phrase</button>
+function Button({children, onClick}) {
+  return <button className="bg-blue-500 text-white"  
+  onClick={onClick}>{children}</button>
+}
+
+function Textarea({value, onChange}) {
+  return <textarea className="bg-blue-50"></textarea>
+  value={value}
+  onChange={onChange}
 }
 
 function MyThing() {
@@ -31,12 +40,14 @@ function MyThing() {
   }
 
   return (
-    <>
+    <div className="container bg-gray-50 ml-20 shadow-md w-1/4">
       <div>
-        <Button>Record Audio</Button>
+        <Button 
+        onClick={() => window.alert("Record button click")}
+        >Record Audio</Button>
       </div>
       <div>
-        <button onClick={() => window.alert("Transcript button click")}>Show Transcript</button>
+        <Button onClick={() => doIHaveAxios()}>Show Transcript</Button>
       </div>
       <div>
         <label>Source Text</label>
@@ -54,16 +65,17 @@ function MyThing() {
         ></textarea>
       </div>
       <div>
-        <button onClick={doTranslation}>Show Translation</button>
+        <Button onClick={doTranslation}>Show Translation</Button>
       </div>
       <div>
         <label>Translation</label>
         <textarea type="text" readOnly={true}  value={translatedText}></textarea>
       </div>
       <div>
-        <button onClick={clearState}>Reset</button>
+        <Button
+        onClick={clearState}>Reset</Button>
       </div>
-    </>
+    </div>
   )
 }
 
