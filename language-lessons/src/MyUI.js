@@ -7,6 +7,7 @@ import MicRecorder from 'mic-recorder-to-mp3'
 // todo: send audio to API and receive text back
 // todo: make working Textarea component
 // todo: add permission check to record audio
+// todo: cors, why did it have to be cors
 
 /*
 sample of checking permission to use audio
@@ -30,8 +31,35 @@ need to do this functionally. There is probably a hook for that
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
+function queryWithFetch() {
+  let url = "https://6fbn9lr93m.execute-api.us-east-1.amazonaws.com/dev";
+  let txt = "I need this translated.";
+  let data = {"text": txt}
+
+  const response = fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  }).then(function (response) {
+    console.log("Fetch worked")
+  });
+  return "cool";
+}
+
 function doIHaveAxios(){
-  axios.get("https://www.google.com")
+  let url = "https://j27h8nllk4.execute-api.us-east-1.amazonaws.com/dev/text";
+  let txt = "I am going to get some lunch.";
+  let data = {"text": txt};
+  axios.post(url=url, data=data).then(function (response) {
+    console.log(response);
+  })
+//  queryWithFetch();
   return "Cool"
 }
 
