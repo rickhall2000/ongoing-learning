@@ -1,7 +1,7 @@
 import React, { Children, useState } from 'react';
-import MicRecorder from 'mic-recorder-to-mp3'
 import { fetchTranslation } from "./API";
 import Button from "./components/Button"
+import LanguageDropDown from './components/LanguageDropDown';
 import Recorder from "./components/Recorder"
 
 
@@ -10,7 +10,6 @@ import Recorder from "./components/Recorder"
 // todo: make working Textarea component
 // todo: add permission check to record audio
 // todo: add drop downs for source and target languages
-
 
 
 function MyThing() {
@@ -34,13 +33,19 @@ function MyThing() {
     setGuessText("");
   }
 
+
   return (
     <div className="container bg-gray-50 ml-20 shadow-md w-1/4">
 
       <Recorder>
       </Recorder>
 
-
+      <div>
+        <label>Target Language</label>
+        <LanguageDropDown value={targetLanguage} callback={setTargetLanguage}></LanguageDropDown>
+        <label>Source Language</label>
+        <LanguageDropDown value={sourceLanguage} callback={setSourceLanguage}></LanguageDropDown>
+      </div>
       <div className="w-full px-2">
         <Button onClick={() => translateText()}>Show Transcript</Button>
       </div>
