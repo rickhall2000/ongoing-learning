@@ -1,5 +1,5 @@
 import React, { Children, useState } from 'react';
-import { fetchTranslation } from "./API";
+import { fetchTranslation, getTranscript } from "./API";
 import Button from "./components/Button"
 import LanguageDropDown from './components/LanguageDropDown';
 import Recorder from "./components/Recorder"
@@ -9,7 +9,7 @@ import Recorder from "./components/Recorder"
 // todo: send audio to API and receive text back
 // todo: make working Textarea component
 // todo: add permission check to record audio
-// todo: add drop downs for source and target languages
+// todo: send text to API and receive audio back
 
 
 function MyThing() {
@@ -25,6 +25,10 @@ function MyThing() {
     // and write it to the translation text box
     fetchTranslation(rawText, (data) => setTranslatedText(data),
       targetLanguage, sourceLanguage);
+  }
+
+  function speechToText() {
+    getTranscript("audio goes here", sourceLanguage, console.log);
   }
 
   function clearState() {
@@ -47,7 +51,7 @@ function MyThing() {
         <LanguageDropDown value={sourceLanguage} callback={setSourceLanguage}></LanguageDropDown>
       </div>
       <div className="w-full px-2">
-        <Button onClick={() => translateText()}>Show Transcript</Button>
+        <Button onClick={speechToText}>Show Transcript</Button>
       </div>
       <div className="w-full px-2">
         <label className="font-bold block text-lg">Source Text</label>
