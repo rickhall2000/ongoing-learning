@@ -1,10 +1,10 @@
 use std::fs::{self, File};
 use std::io::{self, Read};
-//use std::fs::File;
-//use std::io::ErrorKind;
+use std::error::Error;
 
 
-fn main() {
+
+//fn main() {
 //    panic!("Crash and burn!");
 /*
     let v = vec![1, 2, 3];
@@ -46,7 +46,7 @@ fn main() {
 //    let greeting_file = File::open("hello.txt").unwrap();
 /*     let greeting_file = File::open("Hello.txt")
        .expect("Hello.txt should be included in this project"); */
-}
+//}
 
 fn read_username_from_file_long() -> Result<String, io::Error> {
     let username_file_result = File::open("hello.txt");
@@ -79,7 +79,12 @@ fn read_user_name_from_file_short() -> Result<String, io::Error> {
     Ok(username)
 }
 
-fn read_username_from_file() -> Result<String, io::Error> {
+fn read_username_from_file_old() -> Result<String, io::Error> {
     fs::read_to_string("hello.txt")
 }
 
+fn main() -> Result<(), Box<dyn Error>> {
+    let greeting_file = File::open("hello.txt")?;
+
+    Ok(())
+}
