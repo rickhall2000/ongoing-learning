@@ -11,8 +11,7 @@ function Recorder() {
     const [isRecording, setIsRecording] = useState(false);
     const [blobURL, setBlobURL] = useState('');
     const [isBlocked, setIsBlocked] = useState(false);
-
-
+    
     let start = () => {
       if (isBlocked) {
         console.log('Permission Denied');
@@ -30,13 +29,13 @@ function Recorder() {
         .stop()
         .getMp3()
         .then(([buffer, blob]) => {
+          console.log(blob);
           const blobURL = URL.createObjectURL(blob);
           setBlobURL(blobURL);
           setIsRecording(false);
-    
+          console.log(typeof(blob));
           const player = new Audio(URL.createObjectURL(blob));
-          player.play();
-    
+          player.play();    
         }).catch((e) => console.log(e));
     };
     

@@ -1,5 +1,5 @@
 import React, { Children, useState } from 'react';
-import { fetchTranslation, getTranscript } from "./API";
+import { fetchTranslation, getTranscript, getRecording } from "./API";
 import Button from "./components/Button"
 import LanguageDropDown from './components/LanguageDropDown';
 import Recorder from "./components/Recorder"
@@ -10,6 +10,7 @@ import Recorder from "./components/Recorder"
 // todo: make working Textarea component
 // todo: add permission check to record audio
 // todo: send text to API and receive audio back
+// todo: text to speech funtion is getting a file url back. Let's play the file! 
 
 
 function MyThing() {
@@ -18,6 +19,7 @@ function MyThing() {
   const [guessText, setGuessText] = useState("");
   const [targetLanguage, setTargetLanguage] = useState("fr");
   const [sourceLanguage, setSourceLanguage] = useState("en");
+  const [setAudioFile, audioFile] = useState();
 
 
   function translateText() {
@@ -25,6 +27,23 @@ function MyThing() {
     // and write it to the translation text box
     fetchTranslation(rawText, (data) => setTranslatedText(data),
       targetLanguage, sourceLanguage);
+  }
+
+  function textToSpeech(text, sourceLanguage) {
+    getRecording(text, sourceLanguage, (audio) => {
+      setAudioFile(audio);
+      console.log(audio);
+    }) 
+  
+
+    /* .then(([buffer, blob]) => {
+    const blobURL = URL.createObjectURL(blob);
+    setBlobURL(blobURL);
+    setIsRecording(false);
+
+    const player = new Audio(URL.createObjectURL(blob));
+    player.play();
+*/
   }
 
   function speechToText() {
@@ -61,6 +80,7 @@ function MyThing() {
           value={rawText}
           onChange={(event) => setRawText(event.target.value)}
         ></textarea>
+        <Button onClick={() => textToSpeech(rawText, sourceLanguage)}>Hear This</Button>
       </div>
       <div className="w-full px-2">
         <label className="font-bold block text-lg">My Translation</label>

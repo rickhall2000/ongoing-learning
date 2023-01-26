@@ -1,6 +1,9 @@
 import axios from 'axios';
+import configData from './config.json';
+const apiURLBase = configData.SERVER_URL;
+const apiKey = configData.API_KEY;
 
-const apiURLBase = "https://j27h8nllk4.execute-api.us-east-1.amazonaws.com/dev/";
+let defaultOptions = {"headers": {"x-api-key": apiKey}} ;
 
 // todo: find the right params for the api, dummy
 
@@ -11,7 +14,9 @@ export function fetchTranslation(source_text, action, target_language="fr", sour
                 "from": source_language,
                 "to": target_language,};
 
-    axios.post(url=url, data=data).then(function (response) {
+    axios.post(url=url, 
+              data=data, 
+              defaultOptions).then(function (response) {
         let { data } = response;
       action(data);
     })  
@@ -28,7 +33,7 @@ export function getTranscript(audio, language, action) {
   let data = {"text": "This is just a dummy"};
 
       const config = {
-//        headers: { 'content-type': 'multipart/form-data' }
+//        headers: { 'content-type': 'multipart/form-data', }
       };
 
       axios.post(url, data, config).then(function (response) {
@@ -44,7 +49,7 @@ export function getRecording(text, language, action) {
   let data = {"text": text,
               "language": language}
   
-  axios.post(url=url, data=data).then(function (response) {
+  axios.post(url=url, data=data, defaultOptions).then(function (response) {
     let { data } = response;
     action(data);
   })
