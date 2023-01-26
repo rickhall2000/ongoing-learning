@@ -19,7 +19,7 @@ function MyThing() {
   const [guessText, setGuessText] = useState("");
   const [targetLanguage, setTargetLanguage] = useState("fr");
   const [sourceLanguage, setSourceLanguage] = useState("en");
-  const [setAudioFile, audioFile] = useState();
+  const [audioFile, setAudioFile] = useState();
 
 
   function translateText() {
