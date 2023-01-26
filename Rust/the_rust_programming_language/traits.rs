@@ -75,3 +75,14 @@ where
     T: Display + Clone,
     U: Clone + Debug,
 {1}
+
+fn returns_summarizable() -> impl Summary {
+    Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably alrday know, people",
+        ),
+        reply: false,
+        retweet: false,
+    }
+}
