@@ -73,7 +73,7 @@ use std::fmt::Result;
 use std::io::Result as IoResult;
 
 // reexport
-pub use crate::front_of_house::hosting;
+//pub use crate::front_of_house::hosting;
 
 // nested paths
 use std::{cmp::Ordering, io};
