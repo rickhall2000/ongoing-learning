@@ -26,6 +26,8 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+            RestApiId:
+              Ref: ApiGatewayApi
   TranslateFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -40,6 +42,33 @@ Resources:
           Properties:
             Path: /translate
             Method: post
+            RestApiId:
+              Ref: ApiGatewayApi
+  SpeakFunction:
+    Type: Aws::Serverless::Function
+    Properties:
+      CodeUri: speak/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        Speak:
+          Type: Api
+          Properties:
+            Path: /speak
+            Method: post
+            RestApiId:
+              Ref: ApiGatewayApi
+  ApiGatewayApi:
+    Type: Aws::Serverless::Api
+    Properties:
+      StageName: dev
+      Cors:
+        AllowMethods: "'POST, OPTIONS, GET'"
+        AllowOrigin: "*"
+        AllowHeaders: "'X-Forwarded-For'"
+        AllowCredentials: true
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
