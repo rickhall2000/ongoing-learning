@@ -45,7 +45,7 @@ Resources:
             RestApiId:
               Ref: ApiGatewayApi
   SpeakFunction:
-    Type: Aws::Serverless::Function
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: speak/
       Handler: app.lambda_handler
@@ -61,14 +61,15 @@ Resources:
             RestApiId:
               Ref: ApiGatewayApi
   ApiGatewayApi:
-    Type: Aws::Serverless::Api
+    Type: AWS::Serverless::Api
     Properties:
       StageName: dev
       Cors:
         AllowMethods: "'POST, OPTIONS, GET'"
-        AllowOrigin: "*"
-        AllowHeaders: "'X-Forwarded-For'"
+        AllowOrigin: "'*'"
+        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
         AllowCredentials: true
+        Connection: "keep-alive"
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
