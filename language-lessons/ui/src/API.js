@@ -27,14 +27,24 @@ export function getTranscript(audio, language, action) {
   console.log(audio);
   let data = new FormData();
 
-  data.append('wavfile', audio, 'example.wav');    
-  data.append("language", language);
+  
+  //formData.append("image", imagefile.files[0]);
+//  axios.post('upload_file', formData, {
+//    headers: {
+//      'Content-Type': 'multipart/form-data'
+//    }
+//})
+
+  data.append('audio-file', audio);    
+//  data.append('audio-file', audio, 'example.mp3');    
+data.append("language", language);
  
 
   let data2 = {"text": "This is just a dummy"};
 
       const config = {
         headers: { 'content-type': 'multipart/form-data', }
+//        headers: { 'content-type': 'application.json'}
       };
 
       axios.post(url, data, config).then(function (response) {

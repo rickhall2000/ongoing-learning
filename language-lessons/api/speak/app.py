@@ -34,6 +34,7 @@ def lambda_handler(event, context):
     try:
         s3 = boto3.client('s3')
         my_file = s3.get_object(Bucket=bucket_id, Key=recording_id)
+        print("reading from cache")
     except:
         polly = boto3.client('polly')
 
