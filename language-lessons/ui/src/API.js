@@ -24,16 +24,17 @@ export function fetchTranslation(source_text, action, target_language="fr", sour
 
 export function getTranscript(audio, language, action) {
   let url = apiURLBase + "transcribe";
-  /*let data = new FormData();
+  console.log(audio);
+  let data = new FormData();
 
   data.append('wavfile', audio, 'example.wav');    
   data.append("language", language);
- */
+ 
 
-  let data = {"text": "This is just a dummy"};
+  let data2 = {"text": "This is just a dummy"};
 
       const config = {
-//        headers: { 'content-type': 'multipart/form-data', }
+        headers: { 'content-type': 'multipart/form-data', }
       };
 
       axios.post(url, data, config).then(function (response) {

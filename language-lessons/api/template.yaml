@@ -12,22 +12,6 @@ Globals:
     MemorySize: 128
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Architectures:
-        - x86_64
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Method: get
-            RestApiId:
-              Ref: ApiGatewayApi
   TranslateFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -57,6 +41,22 @@ Resources:
           Type: Api
           Properties:
             Path: /speak
+            Method: post
+            RestApiId:
+              Ref: ApiGatewayApi
+  TranscribeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: transcribe/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        Speak:
+          Type: Api
+          Properties:
+            Path: /transcribe
             Method: post
             RestApiId:
               Ref: ApiGatewayApi
