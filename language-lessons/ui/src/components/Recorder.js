@@ -29,9 +29,9 @@ function Recorder( {setRecordedAudio} ) {
         .getMp3()
         .then(([buffer, blob]) => {
           const blobURL = URL.createObjectURL(blob);
-          setRecordedAudio(blobURL);
           setIsRecording(false);
           const player = new Audio(URL.createObjectURL(blob));
+          setRecordedAudio(blob);
           player.play();    
         }).catch((e) => console.log(e));
     };

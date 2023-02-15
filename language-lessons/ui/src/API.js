@@ -22,36 +22,47 @@ export function fetchTranslation(source_text, action, target_language="fr", sour
     })  
 };
 
-export function getTranscript(audio, language, action) {
+//const axios = require('axios');
+
+async function uploadFileToTranscribe(file, language) {
+  const url = '<your_api_gateway_url>'; // Replace with your API Gateway endpoint URL
+  const headers = { 'Content-Type': 'application/json' };
+  const data = { file, language };
+
+  try {
+    const response = await axios.post(url, data, { headers });
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export function getTranscript(file, language, action) {
   let url = apiURLBase + "transcribe";
-  console.log(audio);
+  console.log(file);
   let data = new FormData();
 
-  
-  //formData.append("image", imagefile.files[0]);
-//  axios.post('upload_file', formData, {
-//    headers: {
-//      'Content-Type': 'multipart/form-data'
-//    }
-//})
 
-  data.append('audio-file', audio);    
-//  data.append('audio-file', audio, 'example.mp3');    
-data.append("language", language);
- 
+const reader = new FileReader();
 
-  let data2 = {"text": "This is just a dummy"};
+reader.addEventListener("loadend", () => {
+  // reader.result contains the contents of blob as a typed array
+  console.log(reader.result);
 
-      const config = {
-        headers: { 'content-type': 'multipart/form-data', }
-//        headers: { 'content-type': 'application.json'}
-      };
+  const request_data = {"file": reader.result, language}
+  const config = {
+            headers: { 'content-type': 'application.json'}
+          };
+    
+          axios.post(url, request_data, config).then(function (response) {
+              let { data } = response;
+              action(data);
+            }
+          )
+    
+});
 
-      axios.post(url, data, config).then(function (response) {
-          let { data } = response;
-          action(data);
-        }
-      )
+  reader.readAsDataURL(file);
 }
 
 export function getRecording(text, language, action) {

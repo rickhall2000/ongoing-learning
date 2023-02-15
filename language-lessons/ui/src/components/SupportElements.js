@@ -27,12 +27,14 @@ function SupportPanel({setPromptText}) {
       targetLanguage, sourceLanguage);
   }
 
+  const axios = require('axios');
+
   function invokeGetTranscript() {
     getTranscript(recordedAudio, sourceLanguage, console.log)
   }
 
   function textToSpeech(text, sourceLanguage) {
-    getRecording(text, sourceLanguage, (audio) => {
+    getRecording(text, "en-US", (audio) => {
       setAudioFile(audio);
       console.log(audio);
       const player = new Audio(audio);
