@@ -30,7 +30,7 @@ async function uploadFileToTranscribe(file, language) {
   const data = { file, language };
 
   try {
-    const response = await axios.post(url, data, { headers });
+    const response = await axios.post(url=url, data=data, defaultOptions);
     console.log(response);
   } catch (error) {
     console.error(error);
@@ -54,7 +54,7 @@ reader.addEventListener("loadend", () => {
             headers: { 'content-type': 'application.json'}
           };
     
-          axios.post(url, request_data, config).then(function (response) {
+          axios.post(url, request_data, defaultOptions).then(function (response) {
               let { data } = response;
               action(data);
             }

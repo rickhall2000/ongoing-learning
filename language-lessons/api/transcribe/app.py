@@ -1,15 +1,8 @@
 import json
-from cgi import parse_header, parse_multipart
-from io import BytesIO
-# from streaming_form_data import StreamingFormDataParser
-# from streaming_form_data.targets import ValueTarget
 import base64
 import boto3
 import uuid
 import time
-
-# This function will accept an audio file and return a transcription
-# params are multipart form containing wavfile and language
 
 
 s3 = boto3.client('s3')
@@ -75,13 +68,12 @@ def lambda_handler(event, context):
 
     print(result_file)
 
-
     return {
         'statusCode': 200,
         'body': json.dumps({"msg": 'Hello from Lambda!', "file": result_file}),
         'headers': {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
-                   },
-}
+                   }
+    }
 
