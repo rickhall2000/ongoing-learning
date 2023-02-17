@@ -5,11 +5,10 @@ import uuid
 import time
 
 
-s3 = boto3.client('s3')
-transcribe = boto3.client('transcribe')
-
-
 def lambda_handler(event, context):
+    s3 = boto3.client('s3')
+    transcribe = boto3.client('transcribe')
+
     body = json.loads(event['body'])
     mp3_file = body['file']
 

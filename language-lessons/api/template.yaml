@@ -44,7 +44,7 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGatewayApi
-  TranscribeFunction:
+  OtherFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: transcribe/
@@ -53,7 +53,7 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        Transcribe:
+        Other:
           Type: Api
           Properties:
             Path: /transcribe
