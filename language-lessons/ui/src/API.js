@@ -5,8 +5,6 @@ const apiKey = configData.API_KEY;
 
 let defaultOptions = {"headers": {"x-api-key": apiKey}} ;
 
-// todo: find the right params for the api, dummy
-
 export function fetchTranslation(source_text, action, target_language="fr", source_language="en") {
     let url = apiURLBase + "translate";
 
@@ -22,43 +20,20 @@ export function fetchTranslation(source_text, action, target_language="fr", sour
     })  
 };
 
-//const axios = require('axios');
-
-async function uploadFileToTranscribe(file, language) {
-  const url = '<your_api_gateway_url>'; // Replace with your API Gateway endpoint URL
-  const headers = { 'Content-Type': 'application/json' };
-  const data = { file, language };
-
-  try {
-    const response = await axios.post(url=url, data=data, defaultOptions);
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export function getTranscript(file, language, action) {
   let url = apiURLBase + "transcribe";
-  console.log(file);
-  let data = new FormData();
+  language = "en-US";
 
+  const reader = new FileReader();
 
-const reader = new FileReader();
+  reader.addEventListener("loadend", () => {
 
-reader.addEventListener("loadend", () => {
-  // reader.result contains the contents of blob as a typed array
-  console.log(reader.result);
-
-  const request_data = {"file": reader.result, language}
-  const config = {
-            headers: { 'content-type': 'application.json'}
-          };
-    
-          axios.post(url, request_data, defaultOptions).then(function (response) {
-              let { data } = response;
-              action(data);
-            }
-          )
+    const request_data = {"file": reader.result, language}
+    axios.post(url, request_data, defaultOptions).then(function (response) {
+        let { data } = response;
+        action(data);
+      }
+  )
     
 });
 
