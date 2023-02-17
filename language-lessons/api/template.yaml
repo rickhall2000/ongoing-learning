@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   language_lessons
@@ -65,99 +65,8 @@ Resources:
     Properties:
       StageName: dev
       Cors:
-        AllowMethods: "'POST, OPTIONS, GET'"
+        AllowMethods: "'POST, OPTIONS'"
         AllowOrigin: "'*'"
         AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
         AllowCredentials: true
         Connection: "keep-alive"
-Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
-
-
-#VVVV Chat GPT VVVV
-#Resources:
-#  MyApi:
-#    Type: AWS::Serverless::Api
-#    Properties:
-#      StageName: prod
-#      DefinitionBody:
-#        swagger: '2.0'
-#        info:
-#          title: 'My API'
-#        paths:
-#          /upload:
-#            post:
-#              consumes:
-#                - multipart/form-data # Set this to accept binary data
-#              produces:
-#                - application/json
-#              parameters:
-#                - in: formData
-#                  name: file
-#                  type: file # Set this to handle binary data
-#                  required: true
-#                - in: formData
-#                  name: language
-#                  type: string
-#              responses:
-#                '200':
-#                  description: 'Successful response'
-#                  schema:
-#                    type: object
-#              x-amazon-apigateway-integration:
-#                type: aws
-#                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Translate.Arn}/invocations
-#                httpMethod: POST
-#                passthroughBehavior: when_no_templates
-#                requestTemplates:
-#                  multipart/form-data: |
-#                    #set($inputRoot = $input.path('$'))
-#                    {
-#                      "body": "$util.base64Encode($inputRoot.file)",
-#                      "language": "$inputRoot.language"
-#                    }
-#                responses:
-#                  default:
-#                    statusCode: '200'
-#                    responseTemplates:
-#                      application/json: |
-#                        #set($outputRoot = $input.path('$'))
-#                        {
-#                          "message": "Transcription job started"
-#                        }
-#  Speak:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      CodeUri: my_function/
-#      Handler: lambda_function.lambda_handler
-#      Runtime: python3.9 # Change the runtime to Python 3.9
-#      Policies:
-#        - AmazonS3FullAccess
-#        - AmazonTranscribeFullAccess
-#  Translate:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      CodeUri: translate_function/
-#      Handler: lambda_function.lambda_handler
-#      Runtime: python3.9 # Change the runtime to Python 3.9
-#      Policies:
-#        - AWSLambdaBasicExecutionRole
-#      Events:
-#        ApiGateway:
-#          Type: Api
-#          Properties:
-#            Path: /translate
-#            Method: post
-#            RestApiId:
-#              Ref: MyApi
