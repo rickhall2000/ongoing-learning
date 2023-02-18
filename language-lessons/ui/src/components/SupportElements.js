@@ -20,6 +20,7 @@ function SupportPanel({setPromptText}) {
   const [sourceLanguage, setSourceLanguage] = useState("en");
   const [audioFile, setAudioFile] = useState();
   const [recordedAudio, setRecordedAudio] = useState();
+  const [transcriptLanguage, setTranscriptLanguage] = useState("en" ); 
 
 
   function translateText() {
@@ -29,21 +30,34 @@ function SupportPanel({setPromptText}) {
 
   const axios = require('axios');
 
+  function transcriptLanguageToLanguageCode(language) {
+    console.log(language);
+    switch (language) {
+      case "en":
+        return "en-US";
+      case "fr":
+        return "fr-FR";
+      case "es":
+        return "es-ES";
+      case "de":
+        return "de-DE";
+    }
+  }
+
   function invokeGetTranscript() {
-    getTranscript(recordedAudio, sourceLanguage, console.log)
+    console.log("invokeGetTranscript");
+    let langCode = transcriptLanguageToLanguageCode(transcriptLanguage);
+    console.log(langCode);
+    getTranscript(recordedAudio, langCode,  (data) => setRawText(data))
   }
 
   function textToSpeech(text, sourceLanguage) {
-    getRecording(text, "en-US", (audio) => {
+    getRecording(text, sourceLanguage, (audio) => {
       setAudioFile(audio);
       console.log(audio);
       const player = new Audio(audio);
       player.play();    
     }) 
-  }
-
-  function speechToText() {
-    getTranscript("audio goes here", sourceLanguage, console.log);
   }
 
   function clearState() {
@@ -58,16 +72,17 @@ function SupportPanel({setPromptText}) {
       <Recorder recordedAudio={recordedAudio} setRecordedAudio={setRecordedAudio}>
       </Recorder>
       <div>
-        <Button onClick={invokeGetTranscript}>Invoke Transcribe</Button>
-      </div>
-      <div>
         <label>Target Language</label>
         <LanguageDropDown value={targetLanguage} callback={setTargetLanguage}></LanguageDropDown>
         <label>Source Language</label>
         <LanguageDropDown value={sourceLanguage} callback={setSourceLanguage}></LanguageDropDown>
       </div>
+      <div>
+        <Label>Transcript Language</Label>
+        <LanguageDropDown value={transcriptLanguage} callback={setTranscriptLanguage}></LanguageDropDown>
+      </div>
       <div className="w-full px-2">
-        <Button onClick={speechToText}>Show Transcript</Button>
+        <Button onClick={invokeGetTranscript}>Show Transcript</Button>
       </div>
       <div className="w-full px-2">
         <Label>Source Text</Label>

@@ -22,7 +22,6 @@ export function fetchTranslation(source_text, action, target_language="fr", sour
 
 export function getTranscript(file, language, action) {
   let url = apiURLBase + "transcribe";
-  language = "en-US";
 
   const reader = new FileReader();
 
