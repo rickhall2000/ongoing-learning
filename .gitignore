@@ -1,3 +1,5 @@
+.terraform
+.terraform.lock.hcl
 logs/
 my_keras_model/
 my_logs/
