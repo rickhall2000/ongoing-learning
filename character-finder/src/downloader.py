@@ -6,7 +6,10 @@ from bs4 import BeautifulSoup
 
 clone_wars1_url = "https://www.imdb.com/title/tt1288767/"
 a_new_hope = "https://www.imdb.com/title/tt0076759/"
-sample_file = "star_wars_iv.html"
+sample_file = "clone_wars_cast.html"
+imdb_url = "https://www.imdb.com"
+clone_wars_cast_url = "/title/tt1288767/fullcredits/cast/?ref_=tt_cl_sm"
+star_wars_cast_url = "/title/tt0076759/fullcredits/cast/?ref_=tt_cl_sm"
 
 def download_sample_page(url, file_path):
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -32,6 +35,34 @@ def find_cast_link(html):
     cast_section = s.find('section', attrs={'data-testid': 'title-cast'})
     cast_link = cast_section.select('a')[0]
     return cast_link['href'] if cast_link else None
+
+# todo - this needs to be better. 
+# it does not handle the case where people play themselves
+# it does not handle cases where the same character is referred to by different names such as "Red Two (Wedge)"
+# It does not handle the case where the actor used a different name (as Dennis Lawson)
+def characters_from_cast(cast_row):
+    char = cast_row.find('td', class_="character")
+    if not char:
+        return []
+    cleaned = ''.join([c for c in char.text if c.isalnum() 
+                       or c == ' ' or c == '/' 
+                       or c == '(' or c == ')'])
+    cleaned = cleaned.replace('voice', '')
+    chars = cleaned.split('/')
+    return chars
+
+def get_cast(html):
+    s = BeautifulSoup(html, 'html.parser')
+    cast_section = s.find('table', class_="cast_list")
+    cast = cast_section.select('tr')
+    all_chars = []
+
+    for row in cast:
+        char_list = characters_from_cast(row)
+        for char in char_list:
+            all_chars.append(char.strip())
+
+    return all_chars
     
 if __name__ == "__main__":
-    download_sample_page(a_new_hope, sample_file)
+    download_sample_page(imdb_url + clone_wars_cast_url, sample_file)
