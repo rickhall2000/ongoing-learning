@@ -1,0 +1,1 @@
+I thought it might be fun to try to implement the examples from Grokking Deep Learning in Rust.
