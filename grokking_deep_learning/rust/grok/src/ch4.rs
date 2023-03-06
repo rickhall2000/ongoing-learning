@@ -26,3 +26,20 @@ pub fn hot_and_cold_learning() {
         }
     }
 }
+
+pub fn gradient_descent() {
+    let alpha = 0.1;
+    let mut weight = 0.5;
+    let goal_pred :f32 = 0.8;
+    let input = 2.0;
+
+    // loop 20 times
+    for _iteration in 0..21 {
+        let pred = input * weight;
+        let error = (pred - goal_pred).powf(2.0);
+        let derivative = input * (pred - goal_pred);
+        weight = weight - (alpha * derivative);
+        println!("Error: {} Prediction: {}", error, pred);
+    }
+    
+}
