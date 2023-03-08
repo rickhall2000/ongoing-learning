@@ -1,6 +1,8 @@
 .terraform
 .terraform.lock.hcl
+.idea
 logs/
+tmp/
 build/
 my_keras_model/
 my_logs/
