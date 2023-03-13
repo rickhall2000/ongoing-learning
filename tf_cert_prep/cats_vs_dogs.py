@@ -6,6 +6,8 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import numpy as np
+from PIL import Image
 
 # Paths
 source_path = 'tmp/PetImages'
@@ -154,8 +156,13 @@ def show_an_image(img_path):
     plt.show()
 
 
+def repr_img(img_path):
+    img = np.asarray(Image.open(img_path))
+    print(repr(img))
+
 def show_image():
     cat_pic = os.path.join(cat_train_dir, os.listdir(cat_train_dir)[0])
+    repr_img(cat_pic)
     show_an_image(cat_pic)
 
 
