@@ -47,8 +47,6 @@ def create_train_val_dirs():
     os.makedirs(dog_train_dir)
     os.makedirs(dog_valid_dir)
 
-def reload_test():
-    print("Reload load")
 
 def split_data(source_dir, training_dir, validation_dir, split_size):
     files = os.listdir(source_dir)
@@ -90,35 +88,6 @@ def train_val_generators(TRAINING_DIR, VALIDATION_DIR):
 
     return train_generator, valid_generator
 
-def show_images():
-    pic_index = 0
-    nrows = 4
-    ncols = 4
-    fig = plt.gcf()
-    fig.set_size_inches(ncols * 4, nrows * 4)
-
-    pic_index += 8
-    train_cat_fnames = os.listdir(cat_train_dir)
-    train_dog_fnames = os.listdir(dog_train_dir)
-
-    next_cat_pix = [os.path.join(cat_train_dir, fname)
-                    for fname in train_cat_fnames[pic_index - 4:pic_index]
-                    ]
-
-    next_dog_pix = [os.path.join(dog_train_dir, fname)
-                    for fname in train_dog_fnames[pic_index - 4:pic_index]
-                    ]
-
-    for i, img_path in enumerate(next_cat_pix + next_dog_pix):
-        # Set up subplot; subplot indices start at 1
-        sp = plt.subplot(nrows, ncols, i + 1)
-        sp.axis('Off')  # Don't show axes (or gridlines)
-
-        img = mpimg.imread(img_path)
-        plt.imshow(img)
-
-    plt.show()
-
 def create_model():
     # create and compile the model
     # 3 conv layers
@@ -152,30 +121,42 @@ def train_model():
     return history
 
 
-#show_images()
+def the_history():
+    history = train_model()
 
-history = train_model()
+    acc=history.history['accuracy']
+    val_acc=history.history['val_accuracy']
+    loss=history.history['loss']
+    val_loss=history.history['val_loss']
 
-acc=history.history['accuracy']
-val_acc=history.history['val_accuracy']
-loss=history.history['loss']
-val_loss=history.history['val_loss']
-print("Here I am")
+    epochs=range(len(acc)) # Get number of epochs
 
-epochs=range(len(acc)) # Get number of epochs
+    #------------------------------------------------
+    # Plot training and validation accuracy per epoch
+    #------------------------------------------------
+    plt.plot(epochs, acc, 'r', "Training Accuracy")
+    plt.plot(epochs, val_acc, 'b', "Validation Accuracy")
+    plt.title('Training and validation accuracy')
+    plt.show()
 
-#------------------------------------------------
-# Plot training and validation accuracy per epoch
-#------------------------------------------------
-plt.plot(epochs, acc, 'r', "Training Accuracy")
-plt.plot(epochs, val_acc, 'b', "Validation Accuracy")
-plt.title('Training and validation accuracy')
-plt.show()
-print("")
+    #------------------------------------------------
+    # Plot training and validation loss per epoch
+    #------------------------------------------------
+    plt.plot(epochs, loss, 'r', "Training Loss")
+    plt.plot(epochs, val_loss, 'b', "Validation Loss")
+    plt.show()
 
-#------------------------------------------------
-# Plot training and validation loss per epoch
-#------------------------------------------------
-plt.plot(epochs, loss, 'r', "Training Loss")
-plt.plot(epochs, val_loss, 'b', "Validation Loss")
-plt.show()
+
+def show_an_image(img_path):
+    plt.gcf()
+    img = mpimg.imread(img_path)
+    plt.imshow(img)
+    plt.show()
+
+
+def show_image():
+    cat_pic = os.path.join(cat_train_dir, os.listdir(cat_train_dir)[0])
+    show_an_image(cat_pic)
+
+
+show_image()
