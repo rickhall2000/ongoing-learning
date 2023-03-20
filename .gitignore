@@ -1,6 +1,7 @@
 .terraform
 .terraform.lock.hcl
 .idea
+__pycache__/
 logs/
 tmp/
 build/
