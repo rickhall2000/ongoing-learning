@@ -86,16 +86,44 @@ def make_rail_datasets():
     return train_ds, valid_ds
 
 
-def forecast_linear_model():
+def forecast_any_model(model):
     train_ds, valid_ds = make_rail_datasets()
     tf.random.set_seed(42)
-    model = tf.keras.Sequential([
-        tf.keras.layers.Dense(1, input_shape=[seq_length])
-    ])
     early_stopping_cb = tf.keras.callbacks.EarlyStopping(
         monitor="val_mae", patience=50, restore_best_weights=True)
     opt = tf.keras.optimizers.SGD(learning_rate=0.02, momentum=0.9)
     model.compile(loss=tf.keras.losses.Huber(), optimizer=opt, metrics=["mae"])
     history = model.fit(train_ds, validation_data=valid_ds, epochs=500,
                         callbacks=[early_stopping_cb])
-    return history
+    return history, model
+
+
+def forecast_linear_model():
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(1, input_shape=[seq_length])
+    ])
+    return forecast_any_model(model)
+
+
+def forecast_simple_rnn():
+    model = tf.keras.Sequential([
+        tf.keras.layers.SimpleRNN(1, input_shape=[None, 1])
+    ])
+    return forecast_any_model(model)
+
+
+def forecast_univar_rnn():
+    model = tf.keras.Sequential([
+        tf.keras.layers.SimpleRNN(32, input_shape=[None, 1]),
+        tf.keras.layers.Dense(1)
+    ])
+    return forecast_any_model(model)
+
+def forecast_deep_rnn():
+    model = tf.keras.Sequential([
+        tf.keras.layers.SimpleRNN(32, return_sequences=True, input_shape=[None, 1]),
+        tf.keras.layers.SimpleRNN(32, return_sequences=True),
+        tf.keras.layers.SimpleRNN(32),
+        tf.keras.layers.Dense(1)
+    ])
+    return forecast_any_model(model)
