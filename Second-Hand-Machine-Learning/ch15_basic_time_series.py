@@ -127,3 +127,49 @@ def forecast_deep_rnn():
         tf.keras.layers.Dense(1)
     ])
     return forecast_any_model(model)
+
+def multivar_data():
+    df = get_rider_data()
+    df_mulvar = df[["bus", "rail"]] / 1e6
+    df_mulvar["next_day_type"] = df["day_type"].shift(-1)
+    df_mulvar = pd.get_dummies(df_mulvar)
+    
+    mulvar_train = df_mulvar["2016-01":"2018-12"]
+    mulvar_valid = df_mulvar["2019-01":"2019-05"]
+    mulvar_test = df_mulvar["2019-06":]
+
+    train_mulvar_ds = tf.keras.utils.timeseries_dataset_from_array(
+        mulvar_train.to_numpy(),
+        targets=mulvar_train[["rail", "bus"]][seq_length:],
+        sequence_length=seq_length,
+        batch_size=32,
+        shuffle=True,
+        seed=42
+    )
+
+    valid_mulvar_ds = tf.keras.utils.timeseries_dataset_from_array(
+        mulvar_valid.to_numpy(),
+        targets=mulvar_valid[["rail", "bus"]][seq_length:],
+        sequence_length=seq_length,
+        batch_size=32
+    )
+
+    return train_mulvar_ds, valid_mulvar_ds
+
+def train_multi_var_rnn():
+    train_ds, valid_ds = multivar_data()
+    model = tf.keras.Sequential([
+        tf.keras.layers.SimpleRNN(32, input_shape=[None, 5]),
+        tf.keras.layers.Dense(2)
+    ])
+    tf.random.set_seed(42)
+    early_stopping_cb = tf.keras.callbacks.EarlyStopping(
+        monitor="val_mae", patience=50, restore_best_weights=True)
+    opt = tf.keras.optimizers.SGD(learning_rate=0.02, momentum=0.9)
+    model.compile(loss=tf.keras.losses.Huber(), optimizer=opt, metrics=["mae"])
+    history = model.fit(train_ds, validation_data=valid_ds, epochs=500,
+                        callbacks=[early_stopping_cb])
+    predictions = model.predict(valid_ds)
+
+    return predictions
+
