@@ -133,7 +133,7 @@ def multivar_data():
     df_mulvar = df[["bus", "rail"]] / 1e6
     df_mulvar["next_day_type"] = df["day_type"].shift(-1)
     df_mulvar = pd.get_dummies(df_mulvar)
-    
+
     mulvar_train = df_mulvar["2016-01":"2018-12"]
     mulvar_valid = df_mulvar["2019-01":"2019-05"]
     mulvar_test = df_mulvar["2019-06":]
@@ -173,3 +173,33 @@ def train_multi_var_rnn():
 
     return predictions
 
+
+def to_seq2seq_dataset(series, seq_length=56, ahead=14, target_col=1,
+                       batch_size=32, shuffle=False, seed=None):
+    # I can't see where I differ from the book, but when training it sees the targets as strings
+    ds = to_windows(tf.data.Dataset.from_tensor_slices(series), ahead + 1)
+    ds = to_windows(ds, seq_length).map(lambda S: (S[:, 0], S[:, 1:, 1]))
+    if shuffle:
+        ds = ds.shuffle(8 * batch_size, seed=seed)
+    return ds.batch(batch_size)
+
+
+def forecast_seq2seq():
+    df = get_rider_data()
+    df_mulvar = df[["bus", "rail"]] / 1e6
+    df_mulvar["next_day_type"] = df["day_type"].shift(-1)
+    df_mulvar = pd.get_dummies(df_mulvar)
+
+    mulvar_train = df_mulvar["2016-01":"2018-12"]
+    mulvar_valid = df_mulvar["2019-01":"2019-05"]
+
+    seq2seq_train = to_seq2seq_dataset(mulvar_train, shuffle=True, seed=42)
+    seq2seq_valid = to_seq2seq_dataset(mulvar_valid)
+
+    seq2seq_model = tf.keras.Sequential([
+        tf.keras.layers.SimpleRNN(32, return_sequences=True, input_shape=[None, 5]),
+        tf.keras.layers.Dense(14)
+    ])
+    opt = tf.keras.optimizers.SGD(learning_rate=0.02, momentum=0.9)
+    seq2seq_model.compile(loss=tf.keras.losses.Huber, optimizer=opt, metrics=["mae"])
+    history = seq2seq_model.fit(seq2seq_train, validation_data=seq2seq_valid, epochs=50)
