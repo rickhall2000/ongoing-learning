@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    volume.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    name: pg
+  name: pg-claim-pg-0
+  namespace: default
+  resourceVersion: "671786093"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  dataSource:
+    apiGroup: snapshot.storage.k8s.io
+    kind: VolumeSnapshot
+    name: new-snapshot-test
+  dataSourceRef:
+    apiGroup: snapshot.storage.k8s.io
+    kind: VolumeSnapshot
+    name: new-snapshot-test
+  resources:
+    requests:
+      storage: 200Gi
+  storageClassName: ebs-csi-driver
+  volumeMode: Filesystem
+    #  volumeName: pvc-495f8f58-3335-4564-bcaa-0a9abf8fad42
