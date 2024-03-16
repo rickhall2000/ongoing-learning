@@ -1,12 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './components/Header';
+import Header from './components/Head';
 import Search from './components/Search';
+
+const handleSearchSubmit = (e) => {
+  console.log(e);
+}
 
 function App() {
   return (
     <div>
       <Header title="Images Gallery"/>
-      <Search />
+      <Search handleSubmit={handleSearchSubmit}/>
     </div>
   );
 }
