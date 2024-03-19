@@ -18,7 +18,7 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => {
-        setImages([data, ...images]);
+        setImages([{ ...data, title: word }, ...images]);
       })
       .catch((err) => {
         console.log(err);
@@ -30,7 +30,9 @@ function App() {
     <div>
       <Header title="Images Gallery" />
       <Search word={word} setWord={setWord} handleSubmit={handleSearchSubmit} />
-      <ImageCard />
+      {images.map((image, i) => (
+        <ImageCard key={i} image={image} />
+      ))}
     </div>
   );
 }
