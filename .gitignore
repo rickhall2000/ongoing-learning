@@ -18,3 +18,4 @@ my_fashion_mnist/
 .DS_Store
 .ipynb_checkpoints
 target/
+.env
