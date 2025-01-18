@@ -22,6 +22,7 @@ cohere = "^5.13.4"
 chromadb = "^0.6.1"
 llama-index-readers-wikipedia = "^0.3.0"
 wikipedia = "^1.4.0"
+pyvis = "^0.3.2"
 
 
 [build-system]
